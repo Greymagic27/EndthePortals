@@ -27,7 +27,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveBaseName.set("CoreProtect-AntiXray")
+    archiveBaseName.set("$project.name")
     archiveClassifier.set("")
     dependencies {
         exclude(dependency("io.papermc.paper:paper-api"))
