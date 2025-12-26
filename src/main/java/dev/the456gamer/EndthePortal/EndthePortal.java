@@ -1,22 +1,18 @@
 package dev.the456gamer.EndthePortal;
 
-import java.util.logging.Logger;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.World.Environment;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPortalEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jspecify.annotations.NonNull;
 
 public final class EndthePortal extends JavaPlugin implements Listener {
 
-    Logger logger;
-
     @Override
     public void onEnable() {
-        // Plugin startup logic
-        this.logger = this.getLogger();
         this.getServer().getPluginManager().registerEvents(this, this);
     }
 
@@ -26,11 +22,16 @@ public final class EndthePortal extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void onEntityPortal(@NonNull EntityPortalEvent event) {
-        //logger.info("got entity portal event " + event.getEntity() + ";" + event.getFrom().getWorld() + ";" + event.getFrom().getBlock());
-        if (event.getFrom().getBlock().getType().equals(Material.END_PORTAL) && event.getFrom().getWorld().getEnvironment().equals(World.Environment.THE_END)) {
-            event.setCancelled(true);
-            //logger.info("prevented "+event.getEntity()+" from entering portal at "+event.getFrom());
+    public void onPlayerTeleport(@NonNull PlayerTeleportEvent event) {
+        if (event.getFrom().getWorld() == null) return;
+        TeleportCause cause = event.getCause();
+        if (event.getFrom().getWorld().getEnvironment() == Environment.THE_END) {
+            if (cause == TeleportCause.END_PORTAL || cause == TeleportCause.UNKNOWN) event.setCancelled(true);
         }
+    }
+
+    @EventHandler
+    public void onEntityPortal(@NonNull EntityPortalEvent event) {
+        if (event.getFrom().getWorld().getEnvironment() == Environment.THE_END) event.setCancelled(true);
     }
 }
