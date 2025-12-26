@@ -31,7 +31,6 @@ public final class EndthePortal extends JavaPlugin implements Listener {
         if (event.getFrom().getBlock().getType().equals(Material.END_PORTAL) && event.getFrom().getWorld().getEnvironment().equals(World.Environment.THE_END)) {
             event.setCancelled(true);
             //logger.info("prevented "+event.getEntity()+" from entering portal at "+event.getFrom());
-
         }
     }
 }
